@@ -1,0 +1,58 @@
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.prometheus.svc.cluster.local
+      access: proxy
+      isDefault: true
+
+rbac:
+  create: true
+  pspEnabled: true
+serviceAccount:
+  create: true
+  name:
+
+replicas: 1
+
+deploymentStrategy: RollingUpdate
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+  initialDelaySeconds: 60
+  timeoutSeconds: 30
+  failureThreshold: 10
+
+image:
+  repository: grafana/grafana
+  tag: 5.4.2
+  pullPolicy: IfNotPresent
+
+securityContext:
+  runAsUser: 472
+  fsGroup: 472
+
+service:
+  type: LoadBalancer
+  port: 80
+
+persistence:
+  enabled: true
+  storageClassName: "prometheus"
+  size: 10Gi
+
+adminUser: admin
+adminPassword: password
+
+# Other configurations...
+
+plugins: []

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: disk-usage
+spec:
+  selector:
+    matchLabels:
+      name: disk-usage
+  template:
+    metadata:
+      labels:
+        name: disk-usage
+    spec:
+      containers:
+      - name: disk-usage
+        image: alpine
+        command:
+        - sh
+        - -c
+        - |
+          while true; do
+            df -h;
+            sleep 3600;
+          done
+
