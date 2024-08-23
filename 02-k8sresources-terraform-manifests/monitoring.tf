@@ -55,7 +55,7 @@ resource "helm_release" "prometheus" {
   name             = "prometheus"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  namespace        = var.namespace_monitoring # kubernetes_namespace.kube-namespace.id
+  namespace        = var.namespace_monitoring 
   create_namespace = false
   #  version          = "51.3.0"
   values = [
@@ -70,7 +70,6 @@ resource "helm_release" "prometheus" {
     name  = "server.persistentVolume.enabled"
     value = false
   }
-  # You can provide a map of value using yamlencode. Don't forget to escape the last element after point in the name
   set {
     name = "server\\.resources"
     value = yamlencode({
