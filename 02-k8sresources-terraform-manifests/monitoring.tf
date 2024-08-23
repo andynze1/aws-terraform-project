@@ -49,30 +49,6 @@ resource "helm_release" "argo_cd" {
   depends_on = [kubernetes_namespace.argocd]
 }
 
-resource "helm_release" "grafana" {
-  name             = "grafana"
-  repository       = "https://grafana.github.io/helm-charts"
-  chart            = "grafana"
-  namespace        = var.namespace_monitoring # kubernetes_namespace.monitor_namespace.metadata[0].name
-  version          = var.grafana_version
-  create_namespace = false
-  values = [
-    file("${path.module}/yaml-helm/grafana.yaml"),
-    # yamlencode(var.settings_grafana)
-  ]
-
-  set {
-    name  = "service.type"
-    value = "ClusterIP"
-  }
-
-  set {
-    name  = "adminPassword"
-    value = var.grafana_admin_password
-  }
-
-  depends_on = [kubernetes_namespace.monitor_namespace]
-}
 
 
 resource "helm_release" "prometheus" {

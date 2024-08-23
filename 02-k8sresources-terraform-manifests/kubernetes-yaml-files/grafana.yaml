@@ -1,0 +1,77 @@
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.prometheus.svc.cluster.local
+      access: proxy
+      isDefault: true
+plugins:
+  - grafana-piechart-panel
+sidecar:
+  image:
+    repository: quay.io/kiwigrid/k8s-sidecar
+    tag: 1.15.6
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    folder: /tmp/dashboards
+    configMap:
+      name: grafana-dashboards # dashboards-configmap
+rbac:
+  create: true
+  pspEnabled: true
+serviceAccount:
+  create: true
+  name: grafana-sa
+
+replicas: 1
+
+deploymentStrategy: 
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+# deploymentStrategy: RollingUpdate
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+  initialDelaySeconds: 60
+  timeoutSeconds: 30
+  failureThreshold: 10
+
+image:
+  repository: grafana/grafana
+  tag: 11.1.4
+  pullPolicy: IfNotPresent
+
+securityContext:
+  runAsUser: 472
+  fsGroup: 472
+
+# service:
+#   type: ClusterIP
+#   port: 80
+
+# persistence:
+#   enabled: true
+#   storageClassName: "prometheus"  # Specify the correct storage class
+#   accessModes:
+#     - ReadWriteOnce
+#   size: 10Gi  # Specify the appropriate size for your use case
+
+adminUser: admin
+adminPassword: password
+
+# Other configurations...
+
+# plugins: []
+

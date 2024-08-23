@@ -31,7 +31,7 @@
 
 # persistence:
 #   enabled: true
-#   size: 5Gi  # Size of the PersistentVolumeClaim
+#   size: 10Gi  # Size of the PersistentVolumeClaim
 #   storageClass: "elasticsearch-sc"
 
 # replicas: 1
