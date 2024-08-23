@@ -9,16 +9,16 @@ datasources:
       isDefault: true
 plugins:
   - grafana-piechart-panel
-sidecar:
-  image:
-    repository: quay.io/kiwigrid/k8s-sidecar
-    tag: 1.15.6
-  dashboards:
-    enabled: true
-    label: grafana_dashboard
-    folder: /tmp/dashboards
-    configMap:
-      name: grafana-dashboards # dashboards-configmap
+# sidecar:
+#   image:
+#     repository: quay.io/kiwigrid/k8s-sidecar
+#     tag: 1.15.6
+#   dashboards:
+#     enabled: true
+#     label: grafana_dashboard
+#     folder: /tmp/dashboards
+#     configMap:
+#       name: grafana-dashboards # dashboards-configmap
 rbac:
   create: true
   pspEnabled: true
@@ -57,19 +57,21 @@ securityContext:
   runAsUser: 472
   fsGroup: 472
 
-# service:
-#   type: ClusterIP
-#   port: 80
+service:
+  type: LoadBalancer
+  port: 80
+
+size: 10Gi  # Specify the appropriate size for your use case
+
+adminUser: admin
+adminPassword: password
 
 # persistence:
 #   enabled: true
 #   storageClassName: "prometheus"  # Specify the correct storage class
 #   accessModes:
 #     - ReadWriteOnce
-#   size: 10Gi  # Specify the appropriate size for your use case
-
-adminUser: admin
-adminPassword: password
+#   
 
 # Other configurations...
 

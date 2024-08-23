@@ -2,18 +2,9 @@ resource "time_sleep" "wait_for_kubernetes" {
   create_duration = "60s"
 }
 
-resource "kubernetes_namespace" "kube-namespace" {
+resource "kubernetes_namespace" "monitoring" {
   metadata {
-    name = "prometheus"
-  }
-  depends_on = [
-    time_sleep.wait_for_kubernetes
-  ]
-}
-
-resource "kubernetes_namespace" "monitor_namespace" {
-  metadata {
-    name = var.namespace_monitoring
+    name = "monitoring"
   }
   depends_on = [
     time_sleep.wait_for_kubernetes
@@ -22,7 +13,7 @@ resource "kubernetes_namespace" "monitor_namespace" {
 
 resource "kubernetes_namespace" "argocd" {
   metadata {
-    name = var.namespace_argocd
+    name = "argocd"
   }
   depends_on = [
     time_sleep.wait_for_kubernetes
@@ -39,7 +30,7 @@ resource "helm_release" "argo_cd" {
   skip_crds        = true
   set {
     name  = "server.service.type"
-    value = "ClusterIP"
+    value = "LoadBalancer"
   }
   set {
     name  = "server.ingress.enabled"
@@ -47,7 +38,7 @@ resource "helm_release" "argo_cd" {
   }
   depends_on = [
     time_sleep.wait_for_kubernetes,
-    kubernetes_namespace.argocd
+    kubernetes_namespace.monitoring
   ]
 }
 
@@ -55,7 +46,7 @@ resource "helm_release" "prometheus" {
   name             = "prometheus"
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
-  namespace        = var.namespace_monitoring 
+  namespace        = kubernetes_namespace.monitoring.id 
   create_namespace = false
   #  version          = "51.3.0"
   values = [
@@ -70,6 +61,10 @@ resource "helm_release" "prometheus" {
     name  = "server.persistentVolume.enabled"
     value = false
   }
+  # set {
+  #   name  = "server.service.type"
+  #   value = "LoadBalancer"
+  # }
   set {
     name = "server\\.resources"
     value = yamlencode({
@@ -85,6 +80,6 @@ resource "helm_release" "prometheus" {
   }
   depends_on = [
     time_sleep.wait_for_kubernetes,
-    kubernetes_namespace.monitor_namespace
+    kubernetes_namespace.monitoring
   ]
 }

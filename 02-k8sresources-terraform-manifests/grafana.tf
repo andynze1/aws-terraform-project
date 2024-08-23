@@ -12,32 +12,15 @@ resource "helm_release" "grafana" {
 
   set {
     name  = "service.type"
-    value = "ClusterIP"
+    value = "LoadBalancer"
   }
 
   set {
     name  = "adminPassword"
     value = var.grafana_admin_password
   }
-################################
-#   set {
-#     name  = "persistence.enabled"
-#     value = "true"
-#   }
-
-#   set {
-#     name  = "persistence.storageClassName"
-#     value = "prometheus"  # Ensure this matches your actual StorageClass
-#   }
-
-#   set {
-#     name  = "persistence.size"
-#     value = "10Gi"
-#   }
-
-################################
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -54,7 +37,7 @@ resource "kubernetes_config_map" "volumes-dashboard" {
     "dashboard.json" = "${file("${path.module}/grafana-dashboard/volume-alerting.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -71,7 +54,7 @@ resource "kubernetes_config_map" "node" {
     "node.json" = "${file("${path.module}/grafana-dashboard/node.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -89,7 +72,7 @@ resource "kubernetes_config_map" "coredns" {
     "coredns.json" = "${file("${path.module}/grafana-dashboard/coredns.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -105,7 +88,7 @@ resource "kubernetes_config_map" "api" {
     "api.json" = "${file("${path.module}/grafana-dashboard/api.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -121,7 +104,7 @@ resource "kubernetes_config_map" "kubelet" {
     "kubelet.json" = "${file("${path.module}/grafana-dashboard/kubelet.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -137,7 +120,7 @@ resource "kubernetes_config_map" "proxy" {
     "proxy.json" = "${file("${path.module}/grafana-dashboard/proxy.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -153,7 +136,7 @@ resource "kubernetes_config_map" "statefulsets" {
     "statefulsets.json" = "${file("${path.module}/grafana-dashboard/statefulsets.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -169,7 +152,7 @@ resource "kubernetes_config_map" "persistent-volumes" {
     "persistent-volumes.json" = "${file("${path.module}/grafana-dashboard/persistent-volumes.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -185,7 +168,7 @@ resource "kubernetes_config_map" "prometheous-overview" {
     "prometheous-overview.json" = "${file("${path.module}/grafana-dashboard/prometheous-overview.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -201,7 +184,7 @@ resource "kubernetes_config_map" "use-method-cluster" {
     "use-method-cluster.json" = "${file("${path.module}/grafana-dashboard/use-method-cluster.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -217,7 +200,7 @@ resource "kubernetes_config_map" "use-method-node" {
     "use-method-node.json" = "${file("${path.module}/grafana-dashboard/use-method-node.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -234,7 +217,7 @@ resource "kubernetes_config_map" "compute-resources-cluster" {
     "compute-resources-cluster.json" = "${file("${path.module}/grafana-dashboard/compute-resources-cluster.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -250,7 +233,7 @@ resource "kubernetes_config_map" "compute-resources-node-pods" {
     "compute-resources-node-pods.json" = "${file("${path.module}/grafana-dashboard/compute-resources-node-pods.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -266,7 +249,7 @@ resource "kubernetes_config_map" "compute-resources-pod" {
     "compute-resources-pod.json" = "${file("${path.module}/grafana-dashboard/compute-resources-pod.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -282,7 +265,7 @@ resource "kubernetes_config_map" "compute-resources-workload" {
     "compute-resources-workload.json" = "${file("${path.module}/grafana-dashboard/compute-resources-workload.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -298,7 +281,7 @@ resource "kubernetes_config_map" "compute-resources-namespace-workloads" {
     "compute-resources-namespace-workloads.json" = "${file("${path.module}/grafana-dashboard/compute-resources-namespace-workloads.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -314,7 +297,7 @@ resource "kubernetes_config_map" "computer-resources-namespace-pods" {
     "computer-resources-namespace-pods.json" = "${file("${path.module}/grafana-dashboard/computer-resources-namespace-pods.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -332,7 +315,7 @@ resource "kubernetes_config_map" "networking-namespace-pods" {
     "networking-namespace-pods.json" = "${file("${path.module}/grafana-dashboard/networking-namespace-pods.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -348,7 +331,7 @@ resource "kubernetes_config_map" "networking-namespace-workload" {
     "networking-namespace-workload.json" = "${file("${path.module}/grafana-dashboard/networking-namespace-workload.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -364,7 +347,7 @@ resource "kubernetes_config_map" "networking-cluster" {
     "networking-cluster.json" = "${file("${path.module}/grafana-dashboard/networking-cluster.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -380,7 +363,7 @@ resource "kubernetes_config_map" "networking-pods" {
     "networking-pods.json" = "${file("${path.module}/grafana-dashboard/networking-pods.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -396,7 +379,7 @@ resource "kubernetes_config_map" "networking-workload" {
     "networking-workload.json" = "${file("${path.module}/grafana-dashboard/networking-workload.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -414,7 +397,7 @@ resource "kubernetes_config_map" "istio-control-plane" {
     "istio-control-plane.json" = "${file("${path.module}/grafana-dashboard/istio-control-plane.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -430,7 +413,7 @@ resource "kubernetes_config_map" "istio-mesh" {
     "istio-mesh.json" = "${file("${path.module}/grafana-dashboard/istio-mesh.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -446,7 +429,7 @@ resource "kubernetes_config_map" "istio-performance" {
     "istio-performance.json" = "${file("${path.module}/grafana-dashboard/istio-performance.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -462,7 +445,7 @@ resource "kubernetes_config_map" "istio-service" {
     "istio-service.json" = "${file("${path.module}/grafana-dashboard/istio-service.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
@@ -478,7 +461,7 @@ resource "kubernetes_config_map" "istio-workload" {
     "istio-workload.json" = "${file("${path.module}/grafana-dashboard/istio-workload.json")}"
   }
   depends_on = [
-    kubernetes_namespace.monitor_namespace,
+    kubernetes_namespace.monitoring,
     time_sleep.wait_for_kubernetes
   ]
 }
