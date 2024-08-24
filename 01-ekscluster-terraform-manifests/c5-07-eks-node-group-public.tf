@@ -1,4 +1,3 @@
-
 resource "aws_security_group_rule" "allow_port_31280" {
   type              = "ingress"
   from_port         = 31280
@@ -34,6 +33,7 @@ resource "aws_eks_node_group" "eks_ng_public" {
     aws_iam_role_policy_attachment.eks_worker_node,
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.ec2_registry_readonly,
+    kubernetes_config_map_v1.aws_auth
   ]
   tags = {
     Name = "Public-Node-Group"
@@ -51,9 +51,9 @@ data "terraform_remote_state" "eks" {
 }
 
 
-# Terraform Kubernetes Provider
-provider "kubernetes" {
-  host = data.terraform_remote_state.eks.outputs.cluster_endpoint 
-  cluster_ca_certificate = base64decode(data.terraform_remote_state.eks.outputs.cluster_certificate_authority_data)
-  token = data.aws_eks_cluster_auth.cluster.token
-}
+# # Terraform Kubernetes Provider
+# provider "kubernetes" {
+#   host = data.terraform_remote_state.eks.outputs.cluster_endpoint 
+#   cluster_ca_certificate = base64decode(data.terraform_remote_state.eks.outputs.cluster_certificate_authority_data)
+#   token = data.aws_eks_cluster_auth.cluster.token
+# }

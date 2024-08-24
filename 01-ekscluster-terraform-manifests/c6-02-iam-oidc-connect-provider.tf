@@ -1,22 +1,5 @@
 # Datasource: AWS Partition
 # Use this data source to lookup information about the current AWS partition in which Terraform is working
-data "aws_partition" "current" {}
-
-
-
-data "aws_eks_cluster" "eks_cluster" {
-  name = local.eks_cluster_name
-  depends_on = [ aws_eks_cluster.eks_cluster ]
-}
-
-data "aws_eks_cluster_auth" "eks_cluster_auth" {
-  name = local.eks_cluster_name
-  depends_on = [ aws_eks_cluster.eks_cluster ]
-}
-
-data "external" "oidc_thumbprint" {
-  program = ["bash", "${path.module}/get_thumbprint.sh"]
-}
 
 # # Resource: AWS IAM Open ID Connect Provider
  resource "aws_iam_openid_connect_provider" "oidc_provider" {
