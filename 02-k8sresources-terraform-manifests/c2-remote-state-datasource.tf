@@ -16,3 +16,4 @@ data "terraform_remote_state" "eks" {
     region = var.aws_region #"us-east-1"
   }
 }
+
