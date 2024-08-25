@@ -31,5 +31,8 @@ resource "null_resource" "update_kubeconfig" {
   triggers = {
     cluster_name = var.cluster_name
   }
-  depends_on = [aws_eks_cluster.eks_cluster]
+  depends_on = [
+    aws_eks_cluster.eks_cluster, 
+    aws_eks_node_group.eks_public_node_group
+  ]
 }
