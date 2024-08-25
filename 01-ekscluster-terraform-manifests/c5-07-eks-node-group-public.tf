@@ -33,7 +33,7 @@ resource "aws_eks_node_group" "eks_ng_public" {
     aws_iam_role_policy_attachment.eks_worker_node,
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.ec2_registry_readonly,
-    kubernetes_config_map_v1.aws_auth
+    # kubernetes_config_map_v1.aws_auth
   ]
   tags = {
     Name = "Public-Node-Group"

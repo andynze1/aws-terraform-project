@@ -1,6 +1,6 @@
 # Resource: AWS IAM User - Admin User (Has Full AWS Access)
 resource "aws_iam_user" "admin_user" {
-  name = "eksadmin1" # "${local.name}-eksadmin1"  
+  name = "${local.name}-eksadmin1"
   path = "/"
   force_destroy = true
   tags = local.common_tags

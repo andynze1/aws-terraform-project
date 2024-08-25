@@ -1,6 +1,6 @@
 # Resource: AWS IAM User - Basic User (No AWSConsole Access for AWS Services)
 resource "aws_iam_user" "basic_user" {
-  name = "eksadmin2" #"${local.name}-eksadmin2"  
+  name = "${local.name}-eksadmin2" #"eksadmin2"
   path = "/"
   force_destroy = true
   tags = local.common_tags
@@ -8,7 +8,7 @@ resource "aws_iam_user" "basic_user" {
 
 # Resource: AWS IAM User Policy - EKS Full Access
 resource "aws_iam_user_policy" "basic_user_eks_policy" {
-  name = "dml-eks-full-access-policy"
+  name = "${local.name}-eks-dashboard-full-access-policy" # "dml-eks-full-access-policy"
   user = aws_iam_user.basic_user.name
 
   # Terraform's "jsonencode" function converts a
