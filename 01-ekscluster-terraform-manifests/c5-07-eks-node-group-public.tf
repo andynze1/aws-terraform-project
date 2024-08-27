@@ -1,4 +1,3 @@
-
 resource "aws_security_group_rule" "allow_port_31280" {
   type              = "ingress"
   from_port         = 31280
@@ -9,7 +8,7 @@ resource "aws_security_group_rule" "allow_port_31280" {
 }
 
 # Create AWS EKS Node Group - Public
-resource "aws_eks_node_group" "eks_ng_public" {
+resource "aws_eks_node_group" "eks_public_node_group" {
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "${local.name}-eks-ng-public"
   node_role_arn   = aws_iam_role.eks_nodegroup_role.arn
@@ -18,6 +17,7 @@ resource "aws_eks_node_group" "eks_ng_public" {
   capacity_type   = "ON_DEMAND"
   disk_size       = 25
   instance_types  = ["t3.medium"]
+  version = var.cluster_version
   remote_access {
     ec2_ssh_key               = "eks-terraform-key"
     source_security_group_ids = [aws_eks_cluster.eks_cluster.vpc_config[0].cluster_security_group_id]
@@ -34,6 +34,7 @@ resource "aws_eks_node_group" "eks_ng_public" {
     aws_iam_role_policy_attachment.eks_worker_node,
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.ec2_registry_readonly,
+    kubernetes_config_map_v1.aws_auth
   ]
   tags = {
     Name = "Public-Node-Group"
@@ -51,9 +52,9 @@ data "terraform_remote_state" "eks" {
 }
 
 
-# Terraform Kubernetes Provider
-provider "kubernetes" {
-  host = data.terraform_remote_state.eks.outputs.cluster_endpoint 
-  cluster_ca_certificate = base64decode(data.terraform_remote_state.eks.outputs.cluster_certificate_authority_data)
-  token = data.aws_eks_cluster_auth.cluster.token
-}
+# # Terraform Kubernetes Provider
+# provider "kubernetes" {
+#   host = data.terraform_remote_state.eks.outputs.cluster_endpoint 
+#   cluster_ca_certificate = base64decode(data.terraform_remote_state.eks.outputs.cluster_certificate_authority_data)
+#   token = data.aws_eks_cluster_auth.cluster.token
+# }

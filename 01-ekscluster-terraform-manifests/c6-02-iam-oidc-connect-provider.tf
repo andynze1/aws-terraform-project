@@ -1,22 +1,5 @@
 # Datasource: AWS Partition
 # Use this data source to lookup information about the current AWS partition in which Terraform is working
-data "aws_partition" "current" {}
-
-
-
-data "aws_eks_cluster" "eks_cluster" {
-  name = local.eks_cluster_name
-  depends_on = [ aws_eks_cluster.eks_cluster ]
-}
-
-data "aws_eks_cluster_auth" "eks_cluster_auth" {
-  name = local.eks_cluster_name
-  depends_on = [ aws_eks_cluster.eks_cluster ]
-}
-
-data "external" "oidc_thumbprint" {
-  program = ["bash", "${path.module}/get_thumbprint.sh"]
-}
 
 # # Resource: AWS IAM Open ID Connect Provider
  resource "aws_iam_openid_connect_provider" "oidc_provider" {
@@ -54,3 +37,13 @@ output "aws_iam_openid_connect_provider_extract_from_arn" {
 aws_iam_openid_connect_provider_arn = "arn:aws:iam::180789647333:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
 aws_iam_openid_connect_provider_extract_from_arn = "oidc.eks.us-east-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
 */
+
+# Input Variables - AWS IAM OIDC Connect Provider
+
+
+# EKS OIDC ROOT CA Thumbprint - valid until 2037
+variable "eks_oidc_root_ca_thumbprint" {
+  type        = string
+  description = "Thumbprint of Root CA for EKS OIDC, Valid until 2037"
+  default     = "9451AD2B53C7F41FAB22886CC07D482085336561"
+}

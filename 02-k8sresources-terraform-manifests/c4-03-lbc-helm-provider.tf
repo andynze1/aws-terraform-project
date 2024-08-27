@@ -1,8 +1,3 @@
-# Datasource: EKS Cluster Auth 
-data "aws_eks_cluster_auth" "cluster" {
-  name = data.terraform_remote_state.eks.outputs.cluster_id
-}
-
 
 # HELM Provider
 # For managing Helm Resources installing EBS CSI Drivers and other helm resources

@@ -17,9 +17,6 @@ resource "aws_eks_cluster" "eks_cluster" {
 
   # Enable EKS Cluster Control Plane Logging
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
-
-  # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
-  # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
   depends_on = [
     aws_iam_role_policy_attachment.eks-AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.eks-AmazonEKSVPCResourceController,
@@ -31,9 +28,11 @@ resource "null_resource" "update_kubeconfig" {
     command = "aws eks update-kubeconfig --name ${local.eks_cluster_name} --region ${var.aws_region}"
     #  command = "aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.aws_region} --kubeconfig ${var.kubeconfig_path}"
   }
-
   triggers = {
     cluster_name = var.cluster_name
   }
-  depends_on = [aws_eks_cluster.eks_cluster]
+  depends_on = [
+    aws_eks_cluster.eks_cluster, 
+    aws_eks_node_group.eks_public_node_group
+  ]
 }

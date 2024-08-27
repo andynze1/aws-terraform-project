@@ -3,10 +3,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-data "aws_eks_cluster" "cluster" {
-  name = data.terraform_remote_state.eks.outputs.cluster_id
-}
-
 # Terraform Kubernetes Provider
 provider "kubernetes" {
   host                   = data.terraform_remote_state.eks.outputs.cluster_endpoint
