@@ -81,9 +81,9 @@ output "cluster_identity_oidc_issuer" {
   value = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
 }
 
-output "account_id" {
-  value = data.aws_caller_identity.current.account_id
-}
+# output "account_id" {
+#   value = data.aws_caller_identity.current.account_id
+# }
 # EKS Node Group Outputs - Private
 /*
 output "node_group_private_id" {

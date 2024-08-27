@@ -17,4 +17,4 @@ data "external" "oidc_thumbprint" {
 # AWS Availability Zones Datasource
 data "aws_availability_zones" "available" {
 }
-data "aws_caller_identity" "current" {}
+# data "aws_caller_identity" "current" {}

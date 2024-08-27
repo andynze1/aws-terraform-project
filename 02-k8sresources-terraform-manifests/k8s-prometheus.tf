@@ -6,7 +6,8 @@ resource "helm_release" "prometheus" {
   create_namespace = false
   #  version          = "51.3.0"
   values = [
-    file("values.yaml")
+    # file("values.yaml")
+    file("${path.module}/kubernetes-yaml-files/prometheus-values.yaml")
   ]
   timeout = 600
   set {

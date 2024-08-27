@@ -16,7 +16,7 @@ resource "helm_release" "grafana" {
   create_namespace = false
   
   values = [
-    file("${path.module}/kubernetes-yaml-files/grafana.yaml"),
+    file("${path.module}/kubernetes-yaml-files/grafana.values.yaml"),
     # yamlencode(var.settings_grafana)
   ]
 

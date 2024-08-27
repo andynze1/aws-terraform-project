@@ -16,7 +16,7 @@ resource "aws_iam_role" "eks_nodegroup_role" {
       {
         Effect = "Allow",
         Principal = {
-          Federated = aws_iam_openid_connect_provider.oidc_provider.arn
+          Federated = aws_iam_openid_connect_provider.oidc_provider.arn # AWS EKS Cluster -OpenID Connect Provider
         },
         Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {

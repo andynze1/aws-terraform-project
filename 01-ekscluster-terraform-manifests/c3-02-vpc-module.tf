@@ -29,7 +29,6 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-
   tags     = local.common_tags
   vpc_tags = local.common_tags
 

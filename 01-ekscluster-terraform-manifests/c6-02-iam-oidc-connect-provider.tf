@@ -37,3 +37,13 @@ output "aws_iam_openid_connect_provider_extract_from_arn" {
 aws_iam_openid_connect_provider_arn = "arn:aws:iam::180789647333:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
 aws_iam_openid_connect_provider_extract_from_arn = "oidc.eks.us-east-1.amazonaws.com/id/A9DED4A4FA341C2A5D985A260650F232"
 */
+
+# Input Variables - AWS IAM OIDC Connect Provider
+
+
+# EKS OIDC ROOT CA Thumbprint - valid until 2037
+variable "eks_oidc_root_ca_thumbprint" {
+  type        = string
+  description = "Thumbprint of Root CA for EKS OIDC, Valid until 2037"
+  default     = "9451AD2B53C7F41FAB22886CC07D482085336561"
+}

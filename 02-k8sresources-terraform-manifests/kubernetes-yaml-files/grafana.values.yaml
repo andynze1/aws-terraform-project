@@ -9,22 +9,13 @@ datasources:
       isDefault: true
 plugins:
   - grafana-piechart-panel
-# sidecar:
-#   image:
-#     repository: quay.io/kiwigrid/k8s-sidecar
-#     tag: 1.15.6
-#   dashboards:
-#     enabled: true
-#     label: grafana_dashboard
-#     folder: /tmp/dashboards
-#     configMap:
-#       name: grafana-dashboards # dashboards-configmap
+
 rbac:
   create: true
   pspEnabled: true
 serviceAccount:
-  create: true
-  name: grafana-sa
+  create: false
+  name: grafana
 
 replicas: 1
 
@@ -33,6 +24,15 @@ deploymentStrategy:
   rollingUpdate:
     maxUnavailable: 1
 
+sidecar:
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    folder: /var/lib/grafana/dashboards
+    searchNamespace: ALL
+  # configMap:
+  #   name: grafana-dashboards
+  
 # deploymentStrategy: RollingUpdate
 
 readinessProbe:

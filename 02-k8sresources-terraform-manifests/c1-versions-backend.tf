@@ -33,7 +33,7 @@ terraform {
     region = "us-east-1" #var.aws_region
 
     # For State Locking
-    dynamodb_table = "dev-ebs-storage"
+    dynamodb_table = "dev-aws-lbc-ingress"
   }
 }
 
